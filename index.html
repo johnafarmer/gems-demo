@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- GEMS Landing Page - Deployed with GitHub Actions -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEMS - Generative Element Management System</title>
+    <meta name="description" content="A hybrid CLI tool/web app that generates self-contained, ready-to-use web components for any web CMS.">
+    <meta property="og:title" content="GEMS - Generative Element Management System">
+    <meta property="og:description" content="Generate production-ready web components in seconds with our advanced AI-powered system.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            overflow-x: hidden;
+            position: relative;
+        }
+        gems-landing-page {
+            display: block;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <!-- GEMS Component: gems-landing-page -->
+    <script>
+    // Matrix Rain Effect
+    (function() {
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // Matrix characters
+        const chars = '01';
+        const charArray = chars.split('');
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        
+        // Initialize drops
+        for (let x = 0; x < columns; x++) {
+            drops[x] = Math.random() * -100;
+        }
+        
+        function draw() {
+            // Don't clear the canvas - let trails persist
+            // ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+            // ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set text properties
+            ctx.fillStyle = '#9974F8';
+            ctx.font = fontSize + 'px monospace';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#9974F8';
+            
+            // Draw characters
+            for (let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+                
+                // Vary the opacity based on position
+                const opacity = 1 - (y / canvas.height);
+                
+                // Make some characters brighter
+                if (Math.random() > 0.98) {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                    ctx.fillText(text, x, y);
+                } else {
+                    ctx.fillStyle = `rgba(153, 116, 248, ${opacity})`;
+                    ctx.fillText(text, x, y);
+                }
+                
+                // Reset drop to top when it goes off screen
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
+                    drops[i] = 0;
+                    // Clear a vertical strip when resetting
+                    ctx.clearRect(x - fontSize/2, 0, fontSize, canvas.height);
+                }
+                drops[i]++;
+            }
+        }
+        
+        // Start animation
+        setInterval(draw, 50);
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Reinitialize columns
+            const newColumns = canvas.width / fontSize;
+            for (let x = drops.length; x < newColumns; x++) {
+                drops[x] = Math.random() * -100;
+            }
+        });
+        
+        console.log('Matrix rain initialized');
+    })();
+    </script>
+    <script>
+    (function() {
+      if (customElements.get('gems-landing-page')) return;
+      class GemsLandingPage extends HTMLElement{constructor(){super();this.attachShadow({mode:'open'});this.shadowRoot.innerHTML=`<style>@import url('https://fonts.googleapis.com/css2?family=Open+Dyslexic:wght@400;700&display=swap');*{margin:0;padding:0;box-sizing:border-box}:host{display:block;font-family:'Open Dyslexic',monospace;background:transparent;color:#9974F8;min-height:100vh;overflow-x:hidden;position:relative}.container{max-width:1200px;margin:0 auto;padding:2rem;position:relative;z-index:1}.glass{background:rgba(153,116,248,0.1);backdrop-filter:blur(10px);border:1px solid rgba(153,116,248,0.2);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.3)}.hero{text-align:center;padding:4rem 2rem;margin-bottom:3rem;position:relative;overflow:hidden}.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(153,116,248,0.1),transparent);animation:rotate 10s linear infinite;z-index:-1}@keyframes rotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.logo{font-size:4rem;font-weight:700;margin-bottom:1rem;text-shadow:0 0 20px #9974F8;animation:pulse 2s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}.tagline{font-size:1.5rem;margin-bottom:2rem;opacity:0.9}.subtitle{font-size:1.2rem;margin-bottom:3rem;line-height:1.6;max-width:800px;margin-left:auto;margin-right:auto}.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;margin-bottom:3rem}.feature{padding:2rem;text-align:center;transition:transform 0.3s ease,box-shadow 0.3s ease}.feature:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(153,116,248,0.2)}.feature-icon{font-size:3rem;margin-bottom:1rem;display:block}.feature h3{font-size:1.5rem;margin-bottom:1rem;color:#9974F8}.feature p{line-height:1.6;opacity:0.8}.tech-stack{padding:2rem;text-align:center;margin-bottom:3rem}.tech-stack h2{font-size:2rem;margin-bottom:2rem;color:#9974F8}.tech-list{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem}.tech-item{background:rgba(153,116,248,0.2);padding:0.5rem 1rem;border-radius:20px;border:1px solid rgba(153,116,248,0.3);font-size:0.9rem;transition:all 0.3s ease}.tech-item:hover{background:rgba(153,116,248,0.3);transform:scale(1.05)}.cta{text-align:center;padding:3rem 2rem}.cta-button{display:inline-block;background:linear-gradient(45deg,#9974F8,#7B5CF0);color:#000000;padding:1rem 2rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:1.2rem;transition:all 0.3s ease;border:none;cursor:pointer;box-shadow:0 4px 15px rgba(153,116,248,0.4)}.cta-button:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(153,116,248,0.6)}.footer{text-align:center;padding:2rem;border-top:1px solid rgba(153,116,248,0.2);margin-top:3rem}.footer a{color:#9974F8;text-decoration:none;transition:opacity 0.3s ease}.footer a:hover{opacity:0.7}@media (max-width:768px){.logo{font-size:2.5rem}.tagline{font-size:1.2rem}.subtitle{font-size:1rem}.features{grid-template-columns:1fr}.container{padding:1rem}}@media (prefers-reduced-motion:reduce){.hero::before,.logo{animation:none}}</style><div class="container"><section class="hero glass"><h1 class="logo">GEMS</h1><p class="tagline">Generative Element Management System</p><p class="subtitle">A hybrid CLI tool/web app that lets you generate GEMS-click-to-copy,self-contained,ready-to-use web components to drop into any web CMS that accepts custom HTML. Scaffold your page and fill in the pieces,or build an entire layout and iterate and refine using SHARDS.</p></section><section class="features"><div class="feature glass"><span class="feature-icon">⚡</span><h3>Lightning Fast</h3><p>Generate production-ready web components in seconds with our advanced AI-powered system.</p></div><div class="feature glass"><span class="feature-icon">🎨</span><h3>Custom Style Presets</h3><p>Apply consistent styling across all your components with customizable design presets.</p></div><div class="feature glass"><span class="feature-icon">🔧</span><h3>SHARDS System</h3><p>Build entire layouts and iterate with precision using our modular SHARDS architecture.</p></div><div class="feature glass"><span class="feature-icon">🚀</span><h3>Universal Compatibility</h3><p>Drop components into any CMS that accepts custom HTML-WordPress,Webflow,and more.</p></div><div class="feature glass"><span class="feature-icon">🤖</span><h3>AI Integration</h3><p>Powered by OpenRouter and LM Studio for intelligent component generation and optimization.</p></div><div class="feature glass"><span class="feature-icon">📋</span><h3>Click to Copy</h3><p>Self-contained components ready to paste directly into your projects with zero configuration.</p></div></section><section class="tech-stack glass"><h2>Powered By</h2><div class="tech-list"><span class="tech-item">Claude AI</span><span class="tech-item">OpenRouter</span><span class="tech-item">LM Studio</span><span class="tech-item">Web Components</span><span class="tech-item">Shadow DOM</span><span class="tech-item">CLI Tools</span><span class="tech-item">Node.js</span><span class="tech-item">HTML5</span><span class="tech-item">CSS3</span><span class="tech-item">JavaScript</span></div></section><section class="cta glass"><h2 style="margin-bottom:2rem;font-size:2rem;">Ready to Generate?</h2><button class="cta-button" onclick="window.open('https://github.com/johnafarmer/gems','_blank')">Get Started with GEMS</button></section><footer class="footer"><p>Built with Claude Code by <a href="https://github.com/johnafarmer" target="_blank">John</a></p></footer></div>`}}customElements.define('gems-landing-page',GemsLandingPage);
+    })();
+    </script>
+    <gems-landing-page></gems-landing-page>
+</body>
+</html>
